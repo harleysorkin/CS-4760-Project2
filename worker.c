@@ -22,20 +22,25 @@ int main(int argc, char *argv[]) {
 
     int *shmem = (int *)(shmat(shmid, 0, 0));
     int *clockSec = shmem;
-    int *clockMilli = clockSec + 1;
+    int *clockNano = clockSec + 1;
 
     int increase = m * 1000000;
     int i = 0;
 
     while(i != m) {
-        *clockMilli += increase;
-        if(*clockMilli == 1000) {
-            *clockSec += 1;
-            *clockMilli = 0;
-        }
+	*clockNano += increase;
+	if(*clockNano >= 1000000000) {
+	    while(*clockNano >= 1000000000) {
+	    	*clockNano -= 1000000000;
+		*clockSec += 1;
+	    }
+	}
+
         int pid = getpid();
-        printf("worker_pid %d : Iteration %d : Incrementing by %d\n", pid, i, increase);
-        i++;
+	i++;
+        printf("worker_pid %d : ", pid);
+	printf("Iteration %d : ", i);
+	printf("Incrementing by %d\n", increase);
 
     }
 

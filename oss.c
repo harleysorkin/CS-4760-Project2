@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     while((opt = getopt(argc, argv, ":hn::s::m::")) != -1) {
         switch(opt) {
             case 'h':
-                printf("Invalid input. Expected arguments:\n./oss -n x -s y -m z\nWhere \'n\' is the max number of processes to fork (max 18, default 4)\n\'s\' is the number of children that can exist at the same time (default 2)\nand \'m\' is the amount to increase the clock multiplied by 1 million (default 1)\n");
+                printf("Invalid input. Expected arguments:\n./oss -n x -s y -m z\nWhere \'n\' is the max number of processes to fork (max 18, default 4)\n\'s\' is the number of children that can exist at the same time (default 2)\nand \'m\' is the amount to increase the clock multiplied by 1 billion (default 1)\n");
                 return 0;
             case 'n':
                 if(atoi(optarg) > 18) {
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
             case 'm':
                 m = atoi(optarg);
             case '?':
-                printf("Invalid input. Expected arguments:\n./oss -n x -s y -m z\nWhere \'n\' is the max number of processes to fork (max 18, default 4)\n\'s\' is the number of children that can exist at the same time (default 2)\nand \'m\' is the amount to increase the clock multiplied by 1 million (default 1)\n");
+                printf("Invalid input. Expected arguments:\n./oss -n x -s y -m z\nWhere \'n\' is the max number of processes to fork (max 18, default 4)\n\'s\' is the number of children that can exist at the same time (default 2)\nand \'m\' is the amount to increase the clock multiplied by 1 billion (default 1)\n");
                 return 0;
         }
     }
@@ -67,8 +67,8 @@ int main(int argc, char* argv[]) {
 
     int *clockSec = (int *) shmem;
     *clockSec = 0;
-    int *clockMilli = clockSec + 1;
-    *clockMilli = 0;
+    int *clockNano = clockSec + 1;
+    *clockNano = 0;
 
     char argument[10];
     snprintf(argument, 10, "%d", m);
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
     wait();
 
     printf("\nSeconds: %d\n", *clockSec);
-    printf("Milliseconds: %d\n", *clockMilli);
+    printf("Nanoseconds: %d\n", *clockNano);
 
     if(shmdt(shmem) == -1) {
         perror("Error: shmdt:\n");
