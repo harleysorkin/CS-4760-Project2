@@ -24,25 +24,33 @@ int main(int argc, char* argv[]) {
     int s = 2;
     int m = 1;
 
-    while((opt = getopt(argc, argv, ":hn::s::m::")) != -1) {
+    while((opt = getopt(argc, argv, ":hn:s:m:")) != -1) {
         switch(opt) {
+
             case 'h':
                 printf("Invalid input. Expected arguments:\n./oss -n x -s y -m z\nWhere \'n\' is the max number of processes to fork (max 18, default 4)\n\'s\' is the number of children that can exist at the same time (default 2)\nand \'m\' is the amount to increase the clock multiplied by 1 billion (default 1)\n");
                 return 0;
+
             case 'n':
-                if(atoi(optarg) > 18) {
+		n = atoi(optarg);
+                if(n > 18) {
                     printf("\'n\' cannot excede 18 processes. Default value being used.");
+		    n = 4;
                 }
-                else {
-                    n = atoi(optarg);
-                }
+		break;
+
             case 's':
                 s = atoi(optarg);
+		break;
+
             case 'm':
                 m = atoi(optarg);
+		break;
+
             case '?':
                 printf("Invalid input. Expected arguments:\n./oss -n x -s y -m z\nWhere \'n\' is the max number of processes to fork (max 18, default 4)\n\'s\' is the number of children that can exist at the same time (default 2)\nand \'m\' is the amount to increase the clock multiplied by 1 billion (default 1)\n");
                 return 0;
+
         }
     }
 
